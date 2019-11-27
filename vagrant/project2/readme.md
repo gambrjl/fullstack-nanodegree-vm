@@ -5,7 +5,7 @@ This repository stores all code required for the item catalog site. It uses sqla
 
 Clone this repository using:
 
-`git clone https://github.com/Seananigans/fullstack-nanodegree-vm.git`
+`git clone https://github.com/gambrjl/fullstack-nanodegree-vm`
 
 ## Requirements
 
