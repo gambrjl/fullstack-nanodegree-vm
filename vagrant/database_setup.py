@@ -6,24 +6,51 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
  
 Base = declarative_base()
+
+class Users(Base):
+    __tablename__ = 'users'
+
+    id = Column(Integer, primary_key = True)
+    name = Column(String(250), nullable = False)
+    email = Columne(String(250), nullable = False)
+
+    @property
+    def serialize(self):
+
+        return{
+            'id': self.id,
+            'name': self.name,
+            'email': self.email
+        }
  
-class Restaurant(Base):
-    __tablename__ = 'restaurant'
+class Category(Base):
+    __tablename__ = 'category'
    
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
+    items = relationship("Item")
+    user_id = Column(Integer, ForeignKey('users.id'))
+    user = relationship(Users)
+
+    @property
+    def serialize(self):
+
+        return {
+            'id': self.id,
+            'name': self.name
+        }
  
-class MenuItem(Base):
-    __tablename__ = 'menu_item'
+class Item(Base):
+    __tablename__ = 'item'
 
 
     name =Column(String(80), nullable = False)
     id = Column(Integer, primary_key = True)
     description = Column(String(250))
-    price = Column(String(8))
-    course = Column(String(250))
-    restaurant_id = Column(Integer,ForeignKey('restaurant.id'))
-    restaurant = relationship(Restaurant) 
+    category_id = Column(Integer,ForeignKey('category.id'))
+    category = relationship(Category) 
+    user_id = Column(Integer, ForeignKey('users.id'))
+    user = relationship(Users)
 
 #We added this serialize function to be able to send JSON objects in a serializable format
     @property
@@ -33,10 +60,10 @@ class MenuItem(Base):
            'name'         : self.name,
            'description'         : self.description,
            'id'         : self.id,
-           'price'         : self.price,
-           'course'         : self.course,
        }
- 
+     
+
+
 
 engine = create_engine('sqlite:///restaurantmenu.db')
  
